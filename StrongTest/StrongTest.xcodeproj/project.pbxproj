@@ -15,6 +15,7 @@
 		68718A182A0F9755009BAFCA /* CollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A172A0F9755009BAFCA /* CollectionViewViewModel.swift */; };
 		68718A1A2A0F9810009BAFCA /* CollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A192A0F9810009BAFCA /* CollectionViewCellViewModel.swift */; };
 		68718A1D2A0F99A9009BAFCA /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A1C2A0F99A9009BAFCA /* CountryCell.swift */; };
+		68718A1F2A0F9C49009BAFCA /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A1E2A0F9C49009BAFCA /* Factory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		68718A172A0F9755009BAFCA /* CollectionViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewViewModel.swift; sourceTree = "<group>"; };
 		68718A192A0F9810009BAFCA /* CollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		68718A1C2A0F99A9009BAFCA /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
+		68718A1E2A0F9C49009BAFCA /* Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			children = (
 				68718A032A0F92B9009BAFCA /* Assets.xcassets */,
 				68718A052A0F92B9009BAFCA /* LaunchScreen.storyboard */,
+				68718A1E2A0F9C49009BAFCA /* Factory.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 				68718A142A0F94B1009BAFCA /* MainViewController.swift in Sources */,
 				68718A182A0F9755009BAFCA /* CollectionViewViewModel.swift in Sources */,
 				68718A1A2A0F9810009BAFCA /* CollectionViewCellViewModel.swift in Sources */,
+				68718A1F2A0F9C49009BAFCA /* Factory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

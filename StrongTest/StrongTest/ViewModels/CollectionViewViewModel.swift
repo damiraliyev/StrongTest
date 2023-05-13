@@ -9,7 +9,9 @@ import UIKit
 
 class CollectionViewViewModel {
     
-    var countries: [Country] = []
+    var countries: [Country] = [
+        Country(name: "Kazakhstan", currencies: ["T"], capital: "Nur-Sultan", region: "Asia", area: 2.725, coordinates: [51.08, 71.26], population: 19, timezones: ["GMT+6"])
+    ]
     
     func numberOfRows() -> Int {
         return countries.count

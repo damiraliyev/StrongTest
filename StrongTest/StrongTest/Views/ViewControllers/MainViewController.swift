@@ -11,6 +11,8 @@ class MainViewController: UIViewController {
     
     let viewModel = CollectionViewViewModel()
     
+    let sectionInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+    
     let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -20,12 +22,15 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         setup()
         layout()
     }
     
     private func setup() {
+        view.backgroundColor = .systemBackground
+        title = "World Countries"
+        
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CountryCell.self, forCellWithReuseIdentifier: CountryCell.reuseID)
@@ -36,9 +41,9 @@ class MainViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
@@ -47,7 +52,23 @@ class MainViewController: UIViewController {
 
 //MARK: - CollectionViewDelegate methods
 extension MainViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let itemsPerRow: CGFloat = 1
+        let paddingWidth = sectionInsets.left * (itemsPerRow + 1)
+        let availableWidth = collectionView.frame.width - paddingWidth
+        let widthPerItem = availableWidth / itemsPerRow
+
+        return CGSize(width: widthPerItem, height: 250)
+    }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 15, left: sectionInsets.left, bottom: 15, right: sectionInsets.right)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
 }
 
 //MARK: - CollectionViewDataSource methods
