@@ -8,18 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		687189FB2A0F92B8009BAFCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687189FA2A0F92B8009BAFCA /* AppDelegate.swift */; };
-		687189FF2A0F92B8009BAFCA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687189FE2A0F92B8009BAFCA /* ViewController.swift */; };
 		68718A042A0F92B9009BAFCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68718A032A0F92B9009BAFCA /* Assets.xcassets */; };
 		68718A072A0F92B9009BAFCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68718A052A0F92B9009BAFCA /* LaunchScreen.storyboard */; };
+		68718A142A0F94B1009BAFCA /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A132A0F94B1009BAFCA /* MainViewController.swift */; };
+		68718A162A0F953D009BAFCA /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A152A0F953D009BAFCA /* Country.swift */; };
+		68718A182A0F9755009BAFCA /* CollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A172A0F9755009BAFCA /* CollectionViewViewModel.swift */; };
+		68718A1A2A0F9810009BAFCA /* CollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A192A0F9810009BAFCA /* CollectionViewCellViewModel.swift */; };
+		68718A1D2A0F99A9009BAFCA /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A1C2A0F99A9009BAFCA /* CountryCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		687189F72A0F92B8009BAFCA /* StrongTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StrongTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		687189FA2A0F92B8009BAFCA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		687189FE2A0F92B8009BAFCA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		68718A032A0F92B9009BAFCA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		68718A062A0F92B9009BAFCA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		68718A082A0F92B9009BAFCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		68718A132A0F94B1009BAFCA /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		68718A152A0F953D009BAFCA /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
+		68718A172A0F9755009BAFCA /* CollectionViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewViewModel.swift; sourceTree = "<group>"; };
+		68718A192A0F9810009BAFCA /* CollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		68718A1C2A0F99A9009BAFCA /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,12 +61,64 @@
 			isa = PBXGroup;
 			children = (
 				687189FA2A0F92B8009BAFCA /* AppDelegate.swift */,
-				687189FE2A0F92B8009BAFCA /* ViewController.swift */,
-				68718A032A0F92B9009BAFCA /* Assets.xcassets */,
-				68718A052A0F92B9009BAFCA /* LaunchScreen.storyboard */,
 				68718A082A0F92B9009BAFCA /* Info.plist */,
+				68718A112A0F946E009BAFCA /* Resources */,
+				68718A0E2A0F9447009BAFCA /* Models */,
+				68718A0F2A0F944E009BAFCA /* Views */,
+				68718A102A0F9454009BAFCA /* ViewModels */,
 			);
 			path = StrongTest;
+			sourceTree = "<group>";
+		};
+		68718A0E2A0F9447009BAFCA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				68718A152A0F953D009BAFCA /* Country.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		68718A0F2A0F944E009BAFCA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				68718A122A0F94A0009BAFCA /* ViewControllers */,
+				68718A1B2A0F9987009BAFCA /* Cells */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		68718A102A0F9454009BAFCA /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				68718A172A0F9755009BAFCA /* CollectionViewViewModel.swift */,
+				68718A192A0F9810009BAFCA /* CollectionViewCellViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		68718A112A0F946E009BAFCA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				68718A032A0F92B9009BAFCA /* Assets.xcassets */,
+				68718A052A0F92B9009BAFCA /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		68718A122A0F94A0009BAFCA /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				68718A132A0F94B1009BAFCA /* MainViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		68718A1B2A0F9987009BAFCA /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				68718A1C2A0F99A9009BAFCA /* CountryCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,8 +191,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				687189FF2A0F92B8009BAFCA /* ViewController.swift in Sources */,
 				687189FB2A0F92B8009BAFCA /* AppDelegate.swift in Sources */,
+				68718A162A0F953D009BAFCA /* Country.swift in Sources */,
+				68718A1D2A0F99A9009BAFCA /* CountryCell.swift in Sources */,
+				68718A142A0F94B1009BAFCA /* MainViewController.swift in Sources */,
+				68718A182A0F9755009BAFCA /* CollectionViewViewModel.swift in Sources */,
+				68718A1A2A0F9810009BAFCA /* CollectionViewCellViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
