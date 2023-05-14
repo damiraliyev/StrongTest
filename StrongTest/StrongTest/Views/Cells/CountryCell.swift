@@ -64,13 +64,21 @@ class CountryCell: UICollectionViewCell {
         
         populationLabel.attributedText = makeAttributedText(characteristic: "Population: ", value: "19 mln")
         
-        areaLabel.attributedText = makeAttributedText(characteristic: "Area: ", value: "2.725 mln km^2")
+        areaLabel.attributedText = makeAttributedText(characteristic: "Area: ", value: "2.725 mln km", power: 2)
         
         currenciesLabel.attributedText = makeAttributedText(characteristic: "Currencies: ", value: "Tenge (T) (KZT)")
         
         moreButton.setTitleColor(.link, for: .normal)
         moreButton.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         
+    }
+    
+    private func setAttributedTexts(populationString: String, areaString: String, currenciesString: String) {
+        populationLabel.attributedText = makeAttributedText(characteristic: "Population: ", value: populationString)
+        
+        areaLabel.attributedText = makeAttributedText(characteristic: "Area: ", value: areaString, power: 2)
+        
+        currenciesLabel.attributedText = makeAttributedText(characteristic: "Currencies: ", value: currenciesString)
     }
     
     private func layoutCell() {
@@ -118,7 +126,7 @@ class CountryCell: UICollectionViewCell {
 
     }
     
-    private func makeAttributedText(characteristic: String, value: String) -> NSAttributedString {
+    private func makeAttributedText(characteristic: String, value: String, power: Int? = nil) -> NSAttributedString {
         let characteristicsAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.preferredFont(forTextStyle: .body),
             .foregroundColor: UIColor.systemGray
@@ -132,7 +140,32 @@ class CountryCell: UICollectionViewCell {
         let valueString = NSAttributedString(string: value, attributes: valueAttributes)
         rootString.append(valueString)
         
+        if let power = power {
+            let powerAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.preferredFont(forTextStyle: .footnote),
+                .baselineOffset: 8
+            ]
+            let powerString = NSAttributedString(string: String(power), attributes: powerAttributes)
+            rootString.append(powerString)
+        }
+        
         return rootString
+    }
+    
+    weak var viewModel: CollectionViewCellViewModel? {
+        willSet(viewModel) {
+            guard let viewModel = viewModel else {
+                return
+            }
+            nameLabel.text = viewModel.name
+            capitalLabel.text = viewModel.capital
+            
+            setAttributedTexts(
+                populationString: viewModel.population,
+                areaString: viewModel.area,
+                currenciesString: viewModel.currencies
+            )
+        }
     }
 
 }
