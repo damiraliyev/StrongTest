@@ -9,15 +9,28 @@ class CollectionViewCellViewModel {
     private let country: Country
     
     var name: String {
-        return country.name
+        return country.name.common
     }
     
     var currencies: String {
-        return country.currencies[0]
+        var str = ""
+        
+        guard let curr = country.currencies else {
+            return ""
+        }
+        
+        for property in Mirror(reflecting: curr).children {
+            if let currency = property.value as? Currency {
+                print("\(property.label!) = \(currency)")
+                str += currency.name + ", "
+            }
+        }
+        
+        return String(str.dropLast(2))
     }
     
     var capital: String {
-        return country.capital
+        return country.capital?[0] ?? ""
     }
     
     var region: String {
@@ -28,12 +41,12 @@ class CollectionViewCellViewModel {
         return String(country.area) + " mln km"
     }
     
-    var longtitude: Float {
-        return country.coordinates[0]
+    var longtitude: Double {
+        return country.latlng[0]
     }
     
-    var lattitude: Float {
-        return country.coordinates[1]
+    var lattitude: Double {
+        return country.latlng[1]
     }
     
     var population: String {
@@ -42,6 +55,10 @@ class CollectionViewCellViewModel {
     
     var timezones: [String] {
         return country.timezones
+    }
+    
+    var flagURL: String {
+        return country.flags.png
     }
     
     

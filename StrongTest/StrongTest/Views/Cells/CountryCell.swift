@@ -6,9 +6,16 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CountryCell: UICollectionViewCell {
     static let reuseID = "CountryCell"
+    
+    override var isSelected: Bool {
+        didSet {
+            animate()
+        }
+    }
     
     let container: UIView = {
         let view = UIView()
@@ -19,7 +26,7 @@ class CountryCell: UICollectionViewCell {
         return view
     }()
     
-    let imageView: UIImageView = {
+    let flagImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Flag")
@@ -47,6 +54,15 @@ class CountryCell: UICollectionViewCell {
     
     let moreButton = makeButton(withText: "Learn more")
     
+    let chevronImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(systemName: "chevron.up")
+        imageView.tintColor = .black
+        
+        return imageView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
@@ -68,6 +84,8 @@ class CountryCell: UICollectionViewCell {
         
         currenciesLabel.attributedText = makeAttributedText(characteristic: "Currencies: ", value: "Tenge (T) (KZT)")
         
+        currenciesLabel.numberOfLines = 0
+        
         moreButton.setTitleColor(.link, for: .normal)
         moreButton.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         
@@ -84,7 +102,7 @@ class CountryCell: UICollectionViewCell {
     private func layoutCell() {
         contentView.addSubview(container)
         
-        container.addSubview(imageView)
+        container.addSubview(flagImageView)
         
         container.addSubview(nameCapitalStack)
         nameCapitalStack.addArrangedSubview(nameLabel)
@@ -97,6 +115,8 @@ class CountryCell: UICollectionViewCell {
         
         container.addSubview(moreButton)
         
+        container.addSubview(chevronImageView)
+        
         NSLayoutConstraint.activate([
             container.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -105,24 +125,37 @@ class CountryCell: UICollectionViewCell {
         ])
         
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: container.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            flagImageView.topAnchor.constraint(equalTo: container.topAnchor),
+            flagImageView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
         ])
         
         NSLayoutConstraint.activate([
-            nameCapitalStack.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
-            nameCapitalStack.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16)
+            nameCapitalStack.centerYAnchor.constraint(equalTo: flagImageView.centerYAnchor),
+            nameCapitalStack.leadingAnchor.constraint(equalTo: flagImageView.trailingAnchor, constant: 16),
+            nameCapitalStack.trailingAnchor.constraint(equalTo: chevronImageView.leadingAnchor, constant: -16)
         ])
         
         NSLayoutConstraint.activate([
-            characteristicsStack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
-            characteristicsStack.leadingAnchor.constraint(equalTo: container.leadingAnchor)
+            characteristicsStack.topAnchor.constraint(equalTo: flagImageView.bottomAnchor, constant: 16),
+            characteristicsStack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            characteristicsStack.trailingAnchor.constraint(equalTo: container.trailingAnchor)
         ])
         
         NSLayoutConstraint.activate([
             moreButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            moreButton.topAnchor.constraint(equalTo: characteristicsStack.bottomAnchor, constant: 24)
+            moreButton.topAnchor.constraint(equalTo: characteristicsStack.bottomAnchor, constant: 18)
         ])
+        
+        NSLayoutConstraint.activate([
+            chevronImageView.centerYAnchor.constraint(equalTo: flagImageView.centerYAnchor),
+            chevronImageView.trailingAnchor.constraint(equalTo: container.trailingAnchor)
+        ])
+        //Некоторые названия стран очень длинные, из за этого они выходит поверх иконку. Чтобы осуществить
+        // поведение чтобы навзание обрывалось троеточием, даем дополнительный констрейнт стэку:
+        // nameCapitalStack.trailingAnchor.constraint(equalTo: chevronImageView.leadingAnchor, constant: -16)
+        // Но в этом случае, иконка расплывется, если название страные не такое длинное
+        // Из за этого увеличиваем huggin priority у иконки.
+        chevronImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
     }
     
@@ -157,7 +190,9 @@ class CountryCell: UICollectionViewCell {
             guard let viewModel = viewModel else {
                 return
             }
-            imageView.image = UIImage(named: viewModel.name)
+           
+            flagImageView.sd_setImage(with: URL(string: viewModel.flagURL))
+            print("FLAG URL", viewModel.flagURL)
             nameLabel.text = viewModel.name
             capitalLabel.text = viewModel.capital
             
@@ -166,16 +201,18 @@ class CountryCell: UICollectionViewCell {
                 areaString: viewModel.area,
                 currenciesString: viewModel.currencies
             )
+//            print("weak var viewModel", viewModel.currencies[0])
         }
     }
     
-    func updateAppearance() {
-        
-    }
-
     func animate() {
         UIView.animate(withDuration: 0.3, delay: 0.3, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseIn) {
             self.contentView.layoutIfNeeded()
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            let upsideDown = CGAffineTransform(rotationAngle: .pi * -0.999)
+            self.chevronImageView.transform = self.isSelected ? upsideDown : .identity
         }
     }
 }

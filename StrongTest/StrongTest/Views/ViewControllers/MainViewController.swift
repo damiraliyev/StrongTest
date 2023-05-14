@@ -16,11 +16,11 @@ class MainViewController: UIViewController {
     let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
+        collectionView.allowsMultipleSelection = true
         return collectionView
     }()
     
-    var selectedIndexes: [IndexPath] = [IndexPath(row: 0, section: 0)]
+    var selectedIndexes: [IndexPath] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +36,15 @@ class MainViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CountryCell.self, forCellWithReuseIdentifier: CountryCell.reuseID)
+        
+        viewModel.fetchCountries { [weak self] success in
+            if success {
+                DispatchQueue.main.async {
+                    self?.collectionView.reloadData()
+                }
+               
+            }
+        }
     }
     
     private func layout() {
@@ -79,16 +88,27 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         return 16
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if selectedIndexes.contains(indexPath) {
-            selectedIndexes.removeAll { iPath in
-                indexPath == iPath
-            }
-        } else {
-            selectedIndexes.append(indexPath)
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//
+//    }
+//
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
+        selectedIndexes.append(indexPath)
+        collectionView.performBatchUpdates(nil)
+        
+        return true
+    }
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        selectedIndexes.removeAll { iPath in
+            indexPath == iPath
         }
         
         collectionView.performBatchUpdates(nil)
+        
+        return true
     }
 }
 
@@ -101,7 +121,7 @@ extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CountryCell.reuseID, for: indexPath) as! CountryCell
-        cell.animate()
+//        cell.animate()
         cell.viewModel = viewModel.cellViewModel(for: indexPath)
         
         return cell
