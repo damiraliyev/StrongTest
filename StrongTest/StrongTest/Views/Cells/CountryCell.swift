@@ -168,6 +168,14 @@ class CountryCell: UICollectionViewCell {
             )
         }
     }
+    
+    func updateAppearance() {
+        
+    }
 
-
+    func animate() {
+        UIView.animate(withDuration: 0.3, delay: 0.3, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseIn) {
+            self.contentView.layoutIfNeeded()
+        }
+    }
 }

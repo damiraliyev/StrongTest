@@ -20,7 +20,7 @@ class MainViewController: UIViewController {
         return collectionView
     }()
     
-    var selectedIndex = IndexPath(row: 0, section: 0)
+    var selectedIndexes: [IndexPath] = [IndexPath(row: 0, section: 0)]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,12 +61,13 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         let availableWidth = collectionView.frame.width - paddingWidth
         let widthPerItem = availableWidth / itemsPerRow
         
-        if selectedIndex == indexPath {
+        if selectedIndexes.contains(indexPath) {
             return CGSize(width: widthPerItem, height: 250)
         } else {
             // Image height(55) + 12 padding from top + 12 padding from bottom
             return CGSize(width: widthPerItem, height: 79)
         }
+        
         
     }
     
@@ -76,6 +77,18 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if selectedIndexes.contains(indexPath) {
+            selectedIndexes.removeAll { iPath in
+                indexPath == iPath
+            }
+        } else {
+            selectedIndexes.append(indexPath)
+        }
+        
+        collectionView.performBatchUpdates(nil)
     }
 }
 
@@ -88,7 +101,9 @@ extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CountryCell.reuseID, for: indexPath) as! CountryCell
+        cell.animate()
         cell.viewModel = viewModel.cellViewModel(for: indexPath)
+        
         return cell
     }
     
