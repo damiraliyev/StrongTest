@@ -19,6 +19,8 @@ class MainViewController: UIViewController {
         
         return collectionView
     }()
+    
+    var selectedIndex = IndexPath(row: 0, section: 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,8 +60,14 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         let paddingWidth = sectionInsets.left * (itemsPerRow + 1)
         let availableWidth = collectionView.frame.width - paddingWidth
         let widthPerItem = availableWidth / itemsPerRow
-
-        return CGSize(width: widthPerItem, height: 250)
+        
+        if selectedIndex == indexPath {
+            return CGSize(width: widthPerItem, height: 250)
+        } else {
+            // Image height(55) + 12 padding from top + 12 padding from bottom
+            return CGSize(width: widthPerItem, height: 79)
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

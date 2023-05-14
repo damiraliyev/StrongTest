@@ -157,6 +157,7 @@ class CountryCell: UICollectionViewCell {
             guard let viewModel = viewModel else {
                 return
             }
+            imageView.image = UIImage(named: viewModel.name)
             nameLabel.text = viewModel.name
             capitalLabel.text = viewModel.capital
             
@@ -167,5 +168,6 @@ class CountryCell: UICollectionViewCell {
             )
         }
     }
+
 
 }
