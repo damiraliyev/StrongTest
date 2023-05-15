@@ -192,7 +192,6 @@ class CountryCell: UICollectionViewCell {
             }
            
             flagImageView.sd_setImage(with: URL(string: viewModel.flagURL))
-            print("FLAG URL", viewModel.flagURL)
             nameLabel.text = viewModel.name
             capitalLabel.text = viewModel.capital
             

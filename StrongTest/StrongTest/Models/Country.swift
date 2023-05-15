@@ -21,18 +21,18 @@ struct Country: Codable {
     let area: Double
     let population: Int
     let timezones: [String]
-//    let continents: [Continent]
+    let continents: [Continent]
     let flags: Flags
 }
 
-enum Continent: Codable {
-    case africa
-    case antarctica
-    case asia
-    case europe
-    case northAmerica
-    case oceania
-    case southAmerica
+enum Continent: String, Codable {
+    case africa = "Africa"
+    case antarctica = "Antarctica"
+    case asia = "Asia"
+    case europe = "Europe"
+    case northAmerica = "North America"
+    case oceania = "Oceania"
+    case southAmerica = "South America"
 }
 
 // MARK: - Currencies

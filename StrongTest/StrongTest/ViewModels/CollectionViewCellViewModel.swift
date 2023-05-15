@@ -5,6 +5,8 @@
 //  Created by Damir Aliyev on 13.05.2023.
 //
 
+import Foundation
+
 class CollectionViewCellViewModel {
     private let country: Country
     
@@ -22,7 +24,8 @@ class CollectionViewCellViewModel {
         for property in Mirror(reflecting: curr).children {
             if let currency = property.value as? Currency {
                 print("\(property.label!) = \(currency)")
-                str += currency.name + ", "
+                
+                str += "\(currency.name) (\(property.label?.uppercased() ?? "")), "
             }
         }
         
@@ -37,8 +40,10 @@ class CollectionViewCellViewModel {
         return country.region
     }
     
+    
     var area: String {
-        return String(country.area) + " mln km"
+        //Округляю до 4 цифр, потому что у маленьких стран площадь отоброжались как 0
+        return String((country.area / 1000000).rounded(toPlaces: 4)) + " mln km"
     }
     
     var longtitude: Double {
@@ -50,7 +55,8 @@ class CollectionViewCellViewModel {
     }
     
     var population: String {
-        return String(country.population) + " mln"
+        //Округляю до 3 цифр, потому что страны с очень малым количеством населения отоброжались как 0
+        return String( (Double(country.population) / 1000000).rounded(toPlaces: 3) ) + " mln"
     }
     
     var timezones: [String] {
@@ -67,3 +73,10 @@ class CollectionViewCellViewModel {
     }
 }
 
+extension Double {
+    /// Rounds the double to decimal places value
+    func rounded(toPlaces places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
+    }
+}

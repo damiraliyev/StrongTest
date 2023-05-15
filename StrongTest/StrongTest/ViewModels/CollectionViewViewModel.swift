@@ -10,27 +10,94 @@ import UIKit
 class CollectionViewViewModel {
     
     var countries: [Country] = [
-//        Country(name: "Kazakhstan", currencies: <#T##Currencies?#>, capital: <#T##[String]?#>, region: <#T##Region#>, latlng: <#T##[Double]#>, area: <#T##Double#>, population: <#T##Int#>, timezones: <#T##[String]#>, continents: <#T##[Continent]#>, flags: <#T##Flags#>)
-//        Country(name: "Kazakhstan", currencies: ["T"], capital: "Nur-Sultan", region: "Asia", area: 2.725, coordinates: [51.08, 71.26], population: 19, timezones: ["GMT+6"]),
-//        Country(name: "France", currencies: ["T"], capital: "Paris", region: "Europe", area: 0.64, coordinates: [48.51, 2.21], population: 68, timezones: ["GMT+1"]),
-//        Country(name: "France", currencies: ["T"], capital: "Paris", region: "Europe", area: 0.64, coordinates: [48.51, 2.21], population: 68, timezones: ["GMT+1"])
+
     ]
     
-    func numberOfRows() -> Int {
-        return countries.count
+    var africaCountries: [Country] = []
+    var antarcticaCountries: [Country] = []
+    var asiaCountries: [Country] = []
+    var europeCountries: [Country] = []
+    var northAmericaCountries: [Country] = []
+    var oceniaCountries: [Country] = []
+    var southAmericaCountries: [Country] = []
+    
+    
+    var sectionTitles: [Continent] = []
+ 
+    func numberOfSections() -> Int {
+        return sectionTitles.count
     }
     
+    func numberOfItemsInSection(section: Int) -> Int {
+        switch section {
+        case 0: return africaCountries.count
+        case 1: return antarcticaCountries.count
+        case 2: return asiaCountries.count
+        case 3: return europeCountries.count
+        case 4: return northAmericaCountries.count
+        case 5: return oceniaCountries.count
+        case 6: return southAmericaCountries.count
+        default:
+            return 0
+        }
+    }
+    
+    
+    
     func cellViewModel(for indexPath: IndexPath) -> CollectionViewCellViewModel {
-        let country = countries[indexPath.row]
-        
-        return CollectionViewCellViewModel(country: country)
+
+        switch indexPath.section {
+        case 0: return CollectionViewCellViewModel(country: africaCountries[indexPath.row])
+        case 1: return CollectionViewCellViewModel(country: antarcticaCountries[indexPath.row])
+        case 2: return CollectionViewCellViewModel(country: asiaCountries[indexPath.row])
+        case 3: return CollectionViewCellViewModel(country: europeCountries[indexPath.row])
+        case 4: return CollectionViewCellViewModel(country: northAmericaCountries[indexPath.row])
+        case 5: return CollectionViewCellViewModel(country: oceniaCountries[indexPath.row])
+        case 6: return CollectionViewCellViewModel(country: southAmericaCountries[indexPath.row])
+        default:
+            return CollectionViewCellViewModel(country: Country(name: Name(common: ""), currencies: nil, capital: nil, region: "", latlng: [], area: 0, population: 0, timezones: [], continents: [], flags: Flags(png: "")))
+        }
+
+    }
+    
+    func sectionTitle(for indexPath: IndexPath) -> String {
+        return sectionTitles[indexPath.section].rawValue.uppercased()
     }
     
     func fetchCountries(completion: @escaping (Bool) -> Void) {
-        NetworkService.shared.fetchCountries { result in
+        NetworkService.shared.fetchCountries { [weak self] result in
             switch result {
             case .success(let countries):
-                self.countries = countries
+                self?.countries = countries
+                
+                for country in countries {
+                    switch country.continents[0] {
+                    case .africa:
+                        self?.africaCountries.append(country)
+                    case .antarctica:
+                        self?.antarcticaCountries.append(country)
+                    case .asia:
+                        self?.asiaCountries.append(country)
+                    case .europe:
+                        self?.europeCountries.append(country)
+                    case .northAmerica:
+                        self?.northAmericaCountries.append(country)
+                    case .oceania:
+                        self?.oceniaCountries.append(country)
+                    case .southAmerica:
+                        self?.southAmericaCountries.append(country)
+                    }
+        
+                }
+                self?.sectionTitles = [
+                    Continent.africa,
+                    Continent.antarctica,
+                    Continent.asia,
+                    Continent.europe,
+                    Continent.northAmerica,
+                    Continent.oceania,
+                    Continent.southAmerica
+                ]
                 completion(true)
             case .failure(let error):
                 print(error)

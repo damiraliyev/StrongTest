@@ -18,6 +18,7 @@
 		68718A1F2A0F9C49009BAFCA /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68718A1E2A0F9C49009BAFCA /* Factory.swift */; };
 		68DEB9612A10D2390071823A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DEB9602A10D2390071823A /* NetworkService.swift */; };
 		68DEB9642A11190C0071823A /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 68DEB9632A11190C0071823A /* SDWebImage */; };
+		68DEB9662A1166540071823A /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DEB9652A1166540071823A /* SectionHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		68718A1C2A0F99A9009BAFCA /* CountryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
 		68718A1E2A0F9C49009BAFCA /* Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factory.swift; sourceTree = "<group>"; };
 		68DEB9602A10D2390071823A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		68DEB9652A1166540071823A /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 			children = (
 				68718A122A0F94A0009BAFCA /* ViewControllers */,
 				68718A1B2A0F9987009BAFCA /* Cells */,
+				68DEB9652A1166540071823A /* SectionHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -218,6 +221,7 @@
 				68DEB9612A10D2390071823A /* NetworkService.swift in Sources */,
 				68718A1D2A0F99A9009BAFCA /* CountryCell.swift in Sources */,
 				68718A142A0F94B1009BAFCA /* MainViewController.swift in Sources */,
+				68DEB9662A1166540071823A /* SectionHeader.swift in Sources */,
 				68718A182A0F9755009BAFCA /* CollectionViewViewModel.swift in Sources */,
 				68718A1A2A0F9810009BAFCA /* CollectionViewCellViewModel.swift in Sources */,
 				68718A1F2A0F9C49009BAFCA /* Factory.swift in Sources */,

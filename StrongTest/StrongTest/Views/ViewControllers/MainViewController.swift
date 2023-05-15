@@ -36,6 +36,7 @@ class MainViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CountryCell.self, forCellWithReuseIdentifier: CountryCell.reuseID)
+        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         
         viewModel.fetchCountries { [weak self] success in
             if success {
@@ -114,14 +115,32 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 
 //MARK: - CollectionViewDataSource methods
 extension MainViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return viewModel.numberOfSections()
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.numberOfRows()
+        viewModel.numberOfItemsInSection(section: section)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! SectionHeader
+            sectionHeader.label.text = viewModel.sectionTitle(for: indexPath)
+            return sectionHeader
+        } else {
+            return UICollectionReusableView()
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 20)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CountryCell.reuseID, for: indexPath) as! CountryCell
 //        cell.animate()
+
         cell.viewModel = viewModel.cellViewModel(for: indexPath)
         
         return cell
