@@ -20,7 +20,7 @@ class CollectionViewViewModel {
     var northAmericaCountries: [Country] = []
     var oceniaCountries: [Country] = []
     var southAmericaCountries: [Country] = []
-    
+
     
     var sectionTitles: [Continent] = []
  
@@ -68,6 +68,7 @@ class CollectionViewViewModel {
         NetworkService.shared.fetchCountries { [weak self] result in
             switch result {
             case .success(let countries):
+                // Мне это нужно чтобы с помощью indexPath добыть доступ к любой стране стране
                 self?.countries = countries
                 
                 for country in countries {

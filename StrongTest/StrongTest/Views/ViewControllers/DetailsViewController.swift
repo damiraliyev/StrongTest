@@ -35,7 +35,30 @@ class DetailsViewController: UIViewController {
     let timezonesView = CharacteristicsView(characterictic: "Timezones:", value: "GMT+6")
     
     let stack = makeStack(axis: .vertical, spacing: 40)
-  
+    
+    
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .systemBackground
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.frame = self.view.bounds
+        scrollView.contentSize = contentSize
+        return scrollView
+    }()
+    
+    lazy var contentView: UIView = {
+        let contentView = UIView()
+        contentView.frame.size = contentSize
+        
+        return contentView
+    }()
+    
+    let scrollStack = makeStack(axis: .vertical, spacing: 20)
+    
+    var contentSize: CGSize {
+        CGSize(width: self.view.frame.width, height: self.view.frame.height + 50)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -59,8 +82,12 @@ class DetailsViewController: UIViewController {
     }
     
     private func layout() {
-        view.addSubview(imageView)
-        view.addSubview(stack)
+        view.addSubview(scrollView)
+        
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubview(imageView)
+        contentView.addSubview(stack)
         
         stack.addArrangedSubview(regionView)
         stack.addArrangedSubview(capitalView)
@@ -70,13 +97,15 @@ class DetailsViewController: UIViewController {
         stack.addArrangedSubview(currenciesView)
         stack.addArrangedSubview(timezonesView)
         
-        
-        
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            imageView.heightAnchor.constraint(equalToConstant: (view.frame.size.width - 32) / 1.75)
         ])
+        
+        //        imageViewHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 120)
+        //        imageViewHeightConstraint.isActive = true
         
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 32),
@@ -85,11 +114,12 @@ class DetailsViewController: UIViewController {
         ])
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        // сделано так, потому что это будет лучше выглядить на айпадах. Потому что там соотношение высоты и ширины
-        // другое чем в телефонах
-        imageView.heightAnchor.constraint(equalToConstant: imageView.frame.size.width / 1.75).isActive = true
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if stack.frame.maxY < view.frame.maxY {
+            scrollView.isScrollEnabled = false
+        }
     }
+    
     
 }
