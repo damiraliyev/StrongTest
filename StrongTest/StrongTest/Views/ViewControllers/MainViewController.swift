@@ -43,7 +43,6 @@ class MainViewController: UIViewController {
                 DispatchQueue.main.async {
                     self?.collectionView.reloadData()
                 }
-               
             }
         }
     }
@@ -142,8 +141,39 @@ extension MainViewController: UICollectionViewDataSource {
 //        cell.animate()
 
         cell.viewModel = viewModel.cellViewModel(for: indexPath)
-        
+        cell.cellDelegate = self
         return cell
+    }
+    
+}
+
+extension MainViewController: CountryCellDelegate {
+    func learnMoreTapped(cca2: String) {
+        
+        
+        viewModel.fetchCountry(cca2: cca2) {[weak self] result in
+            switch result {
+            case .success(let country):
+                DispatchQueue.main.async {
+                    let vc = DetailsViewController()
+                    vc.detailsViewModel = DetailViewModel(country: country)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                    self?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                }
+                
+            case .failure(let error):
+                
+                DispatchQueue.main.async {
+                    let alertController = UIAlertController(title: error.localizedDescription, message: "Could not load country details.", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Done", style: .default))
+                    self?.present(alertController, animated: true)
+                }
+                
+            }
+        }
+//        navigationController?.pushViewController(vc, animated: true)
+//        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+//        vc.title = cca2
     }
     
     

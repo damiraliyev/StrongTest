@@ -55,7 +55,7 @@ class CollectionViewViewModel {
         case 5: return CollectionViewCellViewModel(country: oceniaCountries[indexPath.row])
         case 6: return CollectionViewCellViewModel(country: southAmericaCountries[indexPath.row])
         default:
-            return CollectionViewCellViewModel(country: Country(name: Name(common: ""), currencies: nil, capital: nil, region: "", latlng: [], area: 0, population: 0, timezones: [], continents: [], flags: Flags(png: "")))
+            return CollectionViewCellViewModel(country: Country(name: Name(common: ""), currencies: nil, capital: nil, region: "", latlng: [], area: 0, population: 0, timezones: [], continents: [], flags: Flags(png: ""), cca2: ""))
         }
 
     }
@@ -103,6 +103,18 @@ class CollectionViewViewModel {
                 print(error)
                 completion(false)
             }
+        }
+    }
+    
+    func fetchCountry(cca2: String, completion: @escaping (Result<Country, NetworkError>) -> Void) {
+        NetworkService.shared.fetchCountry(cca2: cca2) { result in
+            switch result {
+            case .success(let country):
+                completion(.success(country))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+            
         }
     }
 }

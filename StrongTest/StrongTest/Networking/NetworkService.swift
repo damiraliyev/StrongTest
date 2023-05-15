@@ -40,4 +40,29 @@ final class NetworkService {
         }.resume()
         
     }
+    
+    func fetchCountry(cca2: String, completion: @escaping (Result<Country, NetworkError>) -> Void) {
+        guard let url = URL(string: "https://restcountries.com/v3.1/alpha/\(cca2)") else {
+            completion(.failure(.invalidURL))
+            print("URL", "https://restcountries.com/v3.1/alpha/\(cca2)")
+            return
+        }
+        
+        print("URL", "https://restcountries.com/v3.1/alpha/\(cca2)")
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(.failure(.serverError))
+                return
+            }
+            
+            do {
+                let country = try JSONDecoder().decode([Country].self, from: data)
+                completion(.success(country[0]))
+            } catch {
+                completion(.failure(.decodingError))
+            }
+        }.resume()
+
+    }
 }

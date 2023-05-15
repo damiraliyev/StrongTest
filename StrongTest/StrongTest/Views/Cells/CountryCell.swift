@@ -8,8 +8,14 @@
 import UIKit
 import SDWebImage
 
+protocol CountryCellDelegate: AnyObject {
+    func learnMoreTapped(cca2: String)
+}
+
 class CountryCell: UICollectionViewCell {
     static let reuseID = "CountryCell"
+    
+    weak var cellDelegate: CountryCellDelegate?
     
     override var isSelected: Bool {
         didSet {
@@ -43,7 +49,6 @@ class CountryCell: UICollectionViewCell {
     
     let nameCapitalStack = makeStack(axis: .vertical, spacing: 5)
     
-    
     let populationLabel = makeBaseLabel()
     
     let areaLabel = makeBaseLabel()
@@ -53,6 +58,8 @@ class CountryCell: UICollectionViewCell {
     let characteristicsStack = makeStack(axis: .vertical, spacing: 10)
     
     let moreButton = makeButton(withText: "Learn more")
+    
+    private var cca2: String = ""
     
     let chevronImageView: UIImageView = {
         let imageView = UIImageView()
@@ -88,7 +95,12 @@ class CountryCell: UICollectionViewCell {
         
         moreButton.setTitleColor(.link, for: .normal)
         moreButton.titleLabel?.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
+        moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .primaryActionTriggered)
         
+    }
+    
+    @objc func moreButtonTapped() {
+        cellDelegate?.learnMoreTapped(cca2: cca2)
     }
     
     private func setAttributedTexts(populationString: String, areaString: String, currenciesString: String) {
@@ -154,7 +166,7 @@ class CountryCell: UICollectionViewCell {
         // поведение чтобы навзание обрывалось троеточием, даем дополнительный констрейнт стэку:
         // nameCapitalStack.trailingAnchor.constraint(equalTo: chevronImageView.leadingAnchor, constant: -16)
         // Но в этом случае, иконка расплывется, если название страные не такое длинное
-        // Из за этого увеличиваем huggin priority у иконки.
+        // Из за этого увеличиваем hugging priority у иконки.
         chevronImageView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
     }
@@ -200,7 +212,8 @@ class CountryCell: UICollectionViewCell {
                 areaString: viewModel.area,
                 currenciesString: viewModel.currencies
             )
-//            print("weak var viewModel", viewModel.currencies[0])
+            cca2 = viewModel.cca2
+
         }
     }
     

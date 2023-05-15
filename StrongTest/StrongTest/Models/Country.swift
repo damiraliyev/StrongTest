@@ -23,6 +23,7 @@ struct Country: Codable {
     let timezones: [String]
     let continents: [Continent]
     let flags: Flags
+    let cca2: String
 }
 
 enum Continent: String, Codable {

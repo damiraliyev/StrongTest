@@ -33,7 +33,7 @@ class CollectionViewCellViewModel {
     }
     
     var capital: String {
-        return country.capital?[0] ?? ""
+        return String(country.capital?[0] ?? "")
     }
     
     var region: String {
@@ -67,6 +67,9 @@ class CollectionViewCellViewModel {
         return country.flags.png
     }
     
+    var cca2: String {
+        return country.cca2
+    }
     
     init(country: Country) {
         self.country = country
