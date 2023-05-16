@@ -38,7 +38,7 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
-//        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = .secondarySystemBackground
         view.layer.cornerRadius = 10
         return view
     }()
@@ -69,6 +69,8 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
         
         return imageView
     }()
+    
+    let containerLayer = CAGradientLayer()
     
     let imageLayer = CAGradientLayer()
     let nameLayer = CAGradientLayer()
@@ -151,26 +153,26 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
     }
     
     private func setupLayers() {
-
         imageLayer.startPoint = CGPoint(x: 0, y: 0.5)
         imageLayer.endPoint = CGPoint(x: 1, y: 0.5)
         flagImageView.layer.addSublayer(imageLayer)
-        
+
         nameLayer.startPoint = CGPoint(x: 0, y: 0.5)
         nameLayer.endPoint = CGPoint(x: 1, y: 0.5)
         nameLabel.layer.addSublayer(nameLayer)
-        
+
         capitalLayer.startPoint = CGPoint(x: 0, y: 0.5)
         capitalLayer.endPoint = CGPoint(x: 1, y: 0.5)
         capitalLabel.layer.addSublayer(capitalLayer)
         
-//        chevronLayer.startPoint = CGPoint(x: 0, y: 0.5)
-//        chevronLayer.endPoint = CGPoint(x: 1, y: 0.5)
-//        chevronImageView.layer.addSublayer(chevronLayer)
+        chevronLayer.startPoint = CGPoint(x: 0, y: 0.5)
+        chevronLayer.endPoint = CGPoint(x: 1, y: 0.5)
+        chevronImageView.layer.addSublayer(chevronLayer)
     }
     
     private func setupAnimation() {
         let key = "backgroundColor"
+        
         
         let imageGroup = makeAnimationGroup()
         imageGroup.beginTime = 0.0
@@ -182,8 +184,9 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
         let capitalGroup = makeAnimationGroup(previousGroup: nameGroup)
         capitalLayer.add(capitalGroup, forKey: key)
         
-//        let chevronGroup = makeAnimationGroup(previousGroup: capitalGroup)
-//        chevronLayer.add(chevronGroup, forKey: key)
+        let chevronGroup = makeAnimationGroup(previousGroup: capitalGroup)
+        chevronLayer.add(chevronGroup, forKey: key)
+
     }
     
     func animate() {
@@ -199,8 +202,6 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        print("LAYOUT SUBVIEWS", Date())
         
         imageLayer.frame = flagImageView.bounds
         

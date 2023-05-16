@@ -9,21 +9,22 @@ import UIKit
 
 class CollectionViewViewModel {
     
-    var countries: [Country] = [
+    private var countries: [Country] = [
 
     ]
     
-    
-    var africaCountries: [Country] = []
-    var antarcticaCountries: [Country] = []
-    var asiaCountries: [Country] = []
-    var europeCountries: [Country] = []
-    var northAmericaCountries: [Country] = []
-    var oceniaCountries: [Country] = []
-    var southAmericaCountries: [Country] = []
+    private var africaCountries: [Country] = []
+    private var antarcticaCountries: [Country] = []
+    private var asiaCountries: [Country] = []
+    private var europeCountries: [Country] = []
+    private var northAmericaCountries: [Country] = []
+    private var oceniaCountries: [Country] = []
+    private var southAmericaCountries: [Country] = []
 
     
-    var sectionTitles: [Continent] = [Continent.continent]
+    private var sectionTitles: [Continent] = [Continent.continent]
+    
+    var randomCountry: Country?
  
     func numberOfSections() -> Int {
         return sectionTitles.count
@@ -134,5 +135,10 @@ class CollectionViewViewModel {
         let row = Country.makeSkeleton()
         
         self.africaCountries = Array(repeating: row, count: 10)
+    }
+    
+    func getRandomCountry(completion: (_ name: String, _ capital: String, _ cca2: String) -> Void){
+        randomCountry = countries.randomElement()
+        completion(randomCountry?.name?.common ?? "", randomCountry?.capital?[0] ?? "", randomCountry?.cca2 ?? "")
     }
 }

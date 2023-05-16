@@ -35,6 +35,7 @@ class MainViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "World Countries"
         
+        UNUserNotificationCenter.current().delegate = self
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -43,16 +44,15 @@ class MainViewController: UIViewController {
         collectionView.register(SkeletonCell.self, forCellWithReuseIdentifier: SkeletonCell.reuseID)
         setupSkeletons()
         
-        
         viewModel.fetchCountries { [weak self] success in
             if success {
                 DispatchQueue.main.async {
                     self?.isLoaded = true
+                    self?.pushNotificationIfAllowed()
                     self?.collectionView.reloadData()
                 }
             }
         }
-        
     }
     
     private func setupSkeletons() {
@@ -70,7 +70,28 @@ class MainViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-
+    
+    func fetchCountry(cca2: String) {
+        viewModel.fetchCountry(cca2: cca2) {[weak self] result in
+            switch result {
+            case .success(let country):
+                DispatchQueue.main.async {
+                    let vc = DetailsViewController()
+                    vc.detailsViewModel = DetailViewModel(country: country)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                    self?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    let alertController = UIAlertController(title: error.localizedDescription, message: "Could not load country details.", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Done", style: .default))
+                    self?.present(alertController, animated: true)
+                }
+                
+            }
+        }
+    }
 
 }
 
@@ -100,11 +121,7 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 16
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//
-//    }
-//
+
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
         selectedIndexes.append(indexPath)
@@ -171,32 +188,65 @@ extension MainViewController: UICollectionViewDataSource {
     
 }
 
+
 extension MainViewController: CountryCellDelegate {
     func learnMoreTapped(cca2: String) {
-        
-        viewModel.fetchCountry(cca2: cca2) {[weak self] result in
-            switch result {
-            case .success(let country):
-                DispatchQueue.main.async {
-                    let vc = DetailsViewController()
-                    vc.detailsViewModel = DetailViewModel(country: country)
-                    self?.navigationController?.pushViewController(vc, animated: true)
-                    self?.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-                }
-                
-            case .failure(let error):
-                
-                DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: error.localizedDescription, message: "Could not load country details.", preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "Done", style: .default))
-                    self?.present(alertController, animated: true)
-                }
-                
+        fetchCountry(cca2: cca2)
+    }
+}
+
+
+//MARK: - Notifications
+extension MainViewController {
+    
+    func pushNotificationIfAllowed() {
+        PushNotification.shared.checkForPermission { [weak self] granted in
+            if granted {
+                self?.viewModel.getRandomCountry(completion: { name, capital, cca2 in
+                    self?.dispatchNotification(
+                        name: name,
+                        capital: capital,
+                        cca2: cca2
+                    )
+                })
             }
         }
-
     }
     
+    func dispatchNotification(name: String, capital: String, cca2: String) {
+        let id = "notify"
+        let title = name
+        let body = "Capital of \(title) is \(capital)"
+        
+        let notificationCenter = UNUserNotificationCenter.current()
+        
+        let content = UNMutableNotificationContent()
+        
+        content.title = title
+        content.body = body
+        content.sound = .default
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+        
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
+        notificationCenter.add(request)
+    }
     
 }
 
+
+//MARK: - UNUserNotificationCenterDelegate
+extension MainViewController: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler(.banner)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        guard let country = viewModel.randomCountry else {
+            return
+        }
+        fetchCountry(cca2: country.cca2 ?? "")
+    }
+    
+}

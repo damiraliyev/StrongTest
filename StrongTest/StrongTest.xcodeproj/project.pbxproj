@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		683C2C792A13B89B0079AFBF /* PushNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683C2C782A13B89B0079AFBF /* PushNotification.swift */; };
 		687189FB2A0F92B8009BAFCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687189FA2A0F92B8009BAFCA /* AppDelegate.swift */; };
 		68718A042A0F92B9009BAFCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68718A032A0F92B9009BAFCA /* Assets.xcassets */; };
 		68718A072A0F92B9009BAFCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68718A052A0F92B9009BAFCA /* LaunchScreen.storyboard */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		683C2C782A13B89B0079AFBF /* PushNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotification.swift; sourceTree = "<group>"; };
 		687189F72A0F92B8009BAFCA /* StrongTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StrongTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		687189FA2A0F92B8009BAFCA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		68718A032A0F92B9009BAFCA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,6 +63,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		683C2C7A2A13C5260079AFBF /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				683C2C782A13B89B0079AFBF /* PushNotification.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		687189EE2A0F92B8009BAFCA = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +93,7 @@
 				687189FA2A0F92B8009BAFCA /* AppDelegate.swift */,
 				68718A082A0F92B9009BAFCA /* Info.plist */,
 				68DEB95F2A10BD4A0071823A /* Networking */,
+				683C2C7A2A13C5260079AFBF /* Notifications */,
 				68718A112A0F946E009BAFCA /* Resources */,
 				68718A0E2A0F9447009BAFCA /* Models */,
 				68718A0F2A0F944E009BAFCA /* Views */,
@@ -238,6 +249,7 @@
 				687189FB2A0F92B8009BAFCA /* AppDelegate.swift in Sources */,
 				68718A162A0F953D009BAFCA /* Country.swift in Sources */,
 				68DEB9612A10D2390071823A /* NetworkService.swift in Sources */,
+				683C2C792A13B89B0079AFBF /* PushNotification.swift in Sources */,
 				68B70D522A1216380055A8CC /* DetailsViewController.swift in Sources */,
 				68B70D502A1216230055A8CC /* DetailViewModel.swift in Sources */,
 				68718A1D2A0F99A9009BAFCA /* CountryCell.swift in Sources */,
