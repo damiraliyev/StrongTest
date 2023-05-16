@@ -13,17 +13,24 @@
 import Foundation
 
 struct Country: Codable {
-    let name: Name
+    let name: Name?
     let currencies: Currencies?
     let capital: [String]?
-    let region: String
-    let latlng: [Double]
-    let area: Double
-    let population: Int
-    let timezones: [String]
-    let continents: [Continent]
-    let flags: Flags
-    let cca2: String
+    let region: String?
+    let subregion: String?
+    let latlng: [Double]?
+    let area: Double?
+    let population: Int?
+    let timezones: [String]?
+    let continents: [Continent]?
+    let flags: Flags?
+    let cca2: String?
+    let capitalInfo: CapitalInfo?
+    let maps: Map?
+    
+    static func makeSkeleton() -> Country {
+        return Country(name: Name(common: "     "), currencies: nil, capital: ["     "], region: nil, subregion: nil, latlng: nil, area: nil, population: nil, timezones: nil, continents: nil, flags: nil, cca2: nil, capitalInfo: nil, maps: nil)
+    }
 }
 
 enum Continent: String, Codable {
@@ -34,6 +41,7 @@ enum Continent: String, Codable {
     case northAmerica = "North America"
     case oceania = "Oceania"
     case southAmerica = "South America"
+    case continent = "Continent"
 }
 
 // MARK: - Currencies
@@ -273,3 +281,11 @@ enum Region: Codable {
     case oceania
 }
 
+
+struct CapitalInfo: Codable {
+    let latlng: [Double]?
+}
+
+struct Map: Codable {
+    let openStreetMaps: String
+}

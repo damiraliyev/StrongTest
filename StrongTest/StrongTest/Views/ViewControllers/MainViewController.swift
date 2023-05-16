@@ -20,12 +20,15 @@ class MainViewController: UIViewController {
         return collectionView
     }()
     
-    var selectedIndexes: [IndexPath] = []
+    private var selectedIndexes: [IndexPath] = []
+    
+    private var isLoaded = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         layout()
+        
     }
     
     private func setup() {
@@ -37,14 +40,24 @@ class MainViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.register(CountryCell.self, forCellWithReuseIdentifier: CountryCell.reuseID)
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collectionView.register(SkeletonCell.self, forCellWithReuseIdentifier: SkeletonCell.reuseID)
+        setupSkeletons()
+        
         
         viewModel.fetchCountries { [weak self] success in
             if success {
                 DispatchQueue.main.async {
+                    self?.isLoaded = true
                     self?.collectionView.reloadData()
                 }
             }
         }
+        
+    }
+    
+    private func setupSkeletons() {
+        viewModel.setCountriesForSkeletons()
+        collectionView.reloadData()
     }
     
     private func layout() {
@@ -115,6 +128,9 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 //MARK: - CollectionViewDataSource methods
 extension MainViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if !isLoaded {
+            return 1
+        }
         return viewModel.numberOfSections()
     }
     
@@ -137,19 +153,26 @@ extension MainViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CountryCell.reuseID, for: indexPath) as! CountryCell
-//        cell.animate()
+         
+        if isLoaded {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CountryCell.reuseID, for: indexPath) as! CountryCell
+            cell.viewModel = viewModel.cellViewModel(for: indexPath)
+            cell.cellDelegate = self
+            return cell
+        }
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SkeletonCell.reuseID, for: indexPath) as! SkeletonCell
+        let cellViewModel = viewModel.cellViewModel(for: indexPath)
+        cell.viewModel = cellViewModel
 
-        cell.viewModel = viewModel.cellViewModel(for: indexPath)
-        cell.cellDelegate = self
         return cell
+        
     }
     
 }
 
 extension MainViewController: CountryCellDelegate {
     func learnMoreTapped(cca2: String) {
-        
         
         viewModel.fetchCountry(cca2: cca2) {[weak self] result in
             switch result {
@@ -171,9 +194,7 @@ extension MainViewController: CountryCellDelegate {
                 
             }
         }
-//        navigationController?.pushViewController(vc, animated: true)
-//        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-//        vc.title = cca2
+
     }
     
     

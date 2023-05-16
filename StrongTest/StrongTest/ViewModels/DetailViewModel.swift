@@ -10,27 +10,42 @@ class DetailViewModel {
     let country: Country
     
     var flagURL: String {
-        return country.flags.png
+        return country.flags?.png ?? ""
     }
     
     var region: String {
-        return country.region
+        return country.subregion ?? ""
     }
     
-    var capitals: String {
+    var capital: String {
         return String(country.capital?[0] ?? "")
     }
 
     var capitalCoordinates: String {
-        return String(country.latlng[0]) + ", " + String(country.latlng[1])
+        guard let latlng = country.capitalInfo?.latlng else {
+            return ""
+        }
+        let lat = String(latlng[0]).replacingOccurrences(of: ".", with:  "°") + "'"
+        let lng = String(latlng[1]).replacingOccurrences(of: ".", with:  "°") + "'"
+        return lat + ", " + lng
     }
     
     var population: String {
-        return String(country.population)
+        let unwrapped = country.population ?? 0
+        if unwrapped > 99999 {
+            return String( (Double(unwrapped) / 1000000).rounded(toPlaces: 2) ) + " mln"
+        } else {
+            return String(unwrapped)
+        }
     }
     
     var area: String {
-        return String(country.area) + "km^2"
+        let unwrapped = country.area ?? 0
+        if unwrapped > 99999 {
+            return String(((unwrapped) / 1000000).rounded(toPlaces: 2)) + " mln km"
+        } else {
+            return String(Int(unwrapped)) + " km"
+        }
     }
     
     var currencies: String {
@@ -44,7 +59,7 @@ class DetailViewModel {
             if let currency = property.value as? Currency {
                 print("\(property.label!) = \(currency)")
                 
-                str += "\(currency.name) (\(property.label?.uppercased() ?? "")), "
+                str += "\(currency.name) (\(property.label?.uppercased() ?? "")) \n"
             }
         }
         
@@ -53,12 +68,18 @@ class DetailViewModel {
     
     var timezones: String {
         var tmz = ""
-        
-        for timezone in country.timezones {
+        guard let timezones = country.timezones else {
+            return ""
+        }
+        for timezone in timezones {
             tmz += timezone + ", "
         }
         
         return String(tmz.dropLast(2))
+    }
+    
+    var mapURL: String {
+        return country.maps?.openStreetMaps ?? ""
     }
     
     init(country: Country) {

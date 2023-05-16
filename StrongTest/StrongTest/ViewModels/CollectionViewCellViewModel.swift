@@ -11,7 +11,7 @@ class CollectionViewCellViewModel {
     private let country: Country
     
     var name: String {
-        return country.name.common
+        return country.name?.common ?? ""
     }
     
     var currencies: String {
@@ -37,49 +37,43 @@ class CollectionViewCellViewModel {
     }
     
     var region: String {
-        return country.region
+        return country.region ?? ""
     }
     
     
     var area: String {
-        //Округляю до 4 цифр, потому что у маленьких стран площадь отоброжались как 0
-        return String((country.area / 1000000).rounded(toPlaces: 4)) + " mln km"
+        let unwrapped = country.area ?? 0
+        if unwrapped > 99999 {
+            return String((unwrapped / 1000000).rounded(toPlaces: 2)) + " mln km"
+        } else {
+            return String(Int(unwrapped)) + " km"
+        }
     }
-    
-    var longtitude: Double {
-        return country.latlng[0]
-    }
-    
-    var lattitude: Double {
-        return country.latlng[1]
-    }
-    
+
+
     var population: String {
-        //Округляю до 3 цифр, потому что страны с очень малым количеством населения отоброжались как 0
-        return String( (Double(country.population) / 1000000).rounded(toPlaces: 3) ) + " mln"
+        let unwrapped = country.population ?? 0
+        if unwrapped > 99999 {
+            return String( (Double(unwrapped) / 1000000).rounded(toPlaces: 2) ) + " mln"
+        } else {
+            return String(unwrapped)
+        }
+        
     }
     
     var timezones: [String] {
-        return country.timezones
+        return country.timezones ?? []
     }
     
     var flagURL: String {
-        return country.flags.png
+        return country.flags?.png ?? ""
     }
     
     var cca2: String {
-        return country.cca2
+        return country.cca2 ?? ""
     }
     
     init(country: Country) {
         self.country = country
-    }
-}
-
-extension Double {
-    /// Rounds the double to decimal places value
-    func rounded(toPlaces places:Int) -> Double {
-        let divisor = pow(10.0, Double(places))
-        return (self * divisor).rounded() / divisor
     }
 }

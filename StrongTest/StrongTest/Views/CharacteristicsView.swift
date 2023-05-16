@@ -15,25 +15,28 @@ class CharacteristicsView: UIView {
     let stack = makeStack(axis: .vertical, spacing: 5)
     
     
-    init(characterictic: String, value: String) {
+    init(characterictic: String, value: String, underlined: Bool = false) {
         super.init(frame: .zero)
         characteristicLabel.text = characterictic
-        
         valueLabel.text = value
-        valueLabel.numberOfLines = 0
-
-        translatesAutoresizingMaskIntoConstraints = false
         
-        stack.alignment = .leading
+        if underlined {
+            underlineValueLabel(text: value)
+        }
+        setup()
         layout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     
     private func setup() {
         
+        valueLabel.numberOfLines = 0
+        translatesAutoresizingMaskIntoConstraints = false
+        stack.alignment = .leading
     }
     
     private func layout() {
@@ -54,6 +57,11 @@ class CharacteristicsView: UIView {
             //Нужно было дать и trailing стороны, так как, если у страны два и больше валют, то они уйдут просто за экран
             stack.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+    }
+    
+    private func underlineValueLabel(text: String) {
+        let underlineAttribute: [NSAttributedString.Key: Any] = [.underlineStyle: NSUnderlineStyle.single.rawValue]
+        valueLabel.attributedText = NSAttributedString(string: text, attributes: underlineAttribute)
     }
     
     override var intrinsicContentSize: CGSize {

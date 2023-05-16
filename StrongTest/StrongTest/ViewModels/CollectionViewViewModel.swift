@@ -13,6 +13,7 @@ class CollectionViewViewModel {
 
     ]
     
+    
     var africaCountries: [Country] = []
     var antarcticaCountries: [Country] = []
     var asiaCountries: [Country] = []
@@ -22,7 +23,7 @@ class CollectionViewViewModel {
     var southAmericaCountries: [Country] = []
 
     
-    var sectionTitles: [Continent] = []
+    var sectionTitles: [Continent] = [Continent.continent]
  
     func numberOfSections() -> Int {
         return sectionTitles.count
@@ -47,7 +48,9 @@ class CollectionViewViewModel {
     func cellViewModel(for indexPath: IndexPath) -> CollectionViewCellViewModel {
 
         switch indexPath.section {
-        case 0: return CollectionViewCellViewModel(country: africaCountries[indexPath.row])
+        case 0:
+            print("SECTION 0")
+            return CollectionViewCellViewModel(country: africaCountries[indexPath.row])
         case 1: return CollectionViewCellViewModel(country: antarcticaCountries[indexPath.row])
         case 2: return CollectionViewCellViewModel(country: asiaCountries[indexPath.row])
         case 3: return CollectionViewCellViewModel(country: europeCountries[indexPath.row])
@@ -55,7 +58,7 @@ class CollectionViewViewModel {
         case 5: return CollectionViewCellViewModel(country: oceniaCountries[indexPath.row])
         case 6: return CollectionViewCellViewModel(country: southAmericaCountries[indexPath.row])
         default:
-            return CollectionViewCellViewModel(country: Country(name: Name(common: ""), currencies: nil, capital: nil, region: "", latlng: [], area: 0, population: 0, timezones: [], continents: [], flags: Flags(png: ""), cca2: ""))
+            return CollectionViewCellViewModel(country: Country(name: Name(common: "   "), currencies: nil, capital: nil, region: "", subregion: "", latlng: [], area: 0, population: 0, timezones: [], continents: [], flags: Flags(png: ""), cca2: "", capitalInfo: nil, maps: nil))
         }
 
     }
@@ -66,13 +69,19 @@ class CollectionViewViewModel {
     
     func fetchCountries(completion: @escaping (Bool) -> Void) {
         NetworkService.shared.fetchCountries { [weak self] result in
+            
             switch result {
             case .success(let countries):
                 // Мне это нужно чтобы с помощью indexPath добыть доступ к любой стране стране
                 self?.countries = countries
                 
+                //очистить этот массив, так как мы его использовали для скелетонов
+                self?.africaCountries = []
                 for country in countries {
-                    switch country.continents[0] {
+                    guard let continent = country.continents?[0] else {
+                        continue
+                    }
+                    switch continent {
                     case .africa:
                         self?.africaCountries.append(country)
                     case .antarctica:
@@ -87,6 +96,8 @@ class CollectionViewViewModel {
                         self?.oceniaCountries.append(country)
                     case .southAmerica:
                         self?.southAmericaCountries.append(country)
+                    case .continent:
+                        continue
                     }
         
                 }
@@ -117,5 +128,11 @@ class CollectionViewViewModel {
             }
             
         }
+    }
+    
+    func setCountriesForSkeletons() {
+        let row = Country.makeSkeleton()
+        
+        self.africaCountries = Array(repeating: row, count: 10)
     }
 }

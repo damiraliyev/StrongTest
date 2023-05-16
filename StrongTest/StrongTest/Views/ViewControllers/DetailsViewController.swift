@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class DetailsViewController: UIViewController {
     
@@ -24,7 +25,7 @@ class DetailsViewController: UIViewController {
     
     let capitalView = CharacteristicsView(characterictic: "Capital:", value: "Nur-Sultan")
     
-    let capitalCoordinatesView = CharacteristicsView(characterictic: "Capital Coordinates:", value: "51.08, 71.26")
+    let capitalCoordinatesView = CharacteristicsView(characterictic: "Capital Coordinates:", value: "51.08, 71.26", underlined: true)
     
     let populationView = CharacteristicsView(characterictic: "Population:", value: "19 mln")
     
@@ -56,7 +57,7 @@ class DetailsViewController: UIViewController {
     let scrollStack = makeStack(axis: .vertical, spacing: 20)
     
     var contentSize: CGSize {
-        CGSize(width: self.view.frame.width, height: self.view.frame.height + 50)
+        CGSize(width: self.view.frame.width, height: self.view.frame.height + 100)
     }
     
     override func viewDidLoad() {
@@ -71,14 +72,32 @@ class DetailsViewController: UIViewController {
         if let viewModel = detailsViewModel {
             imageView.sd_setImage(with: URL(string: viewModel.flagURL))
             regionView.valueLabel.text = viewModel.region
-            capitalView.valueLabel.text = viewModel.capitals
+            capitalView.valueLabel.text = viewModel.capital
             capitalCoordinatesView.valueLabel.text = viewModel.capitalCoordinates
             populationView.valueLabel.text = viewModel.population
-            areaView.valueLabel.text = viewModel.area
+            areaView.valueLabel.attributedText = viewModel.area.addPower(power: 2)
             currenciesView.valueLabel.text = viewModel.currencies
         }
         
+        addGestureRecognizers()
+    }
+    
+    
+    func addGestureRecognizers() {
+        capitalCoordinatesView.valueLabel.isUserInteractionEnabled = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(openMap))
+        capitalCoordinatesView.valueLabel.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc func openMap() {
         
+        guard let viewModel = detailsViewModel,
+              let url = URL(string: viewModel.mapURL) else {
+            return
+        }
+        
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
     }
     
     private func layout() {
@@ -103,10 +122,7 @@ class DetailsViewController: UIViewController {
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             imageView.heightAnchor.constraint(equalToConstant: (view.frame.size.width - 32) / 1.75)
         ])
-        
-        //        imageViewHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 120)
-        //        imageViewHeightConstraint.isActive = true
-        
+
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 32),
             stack.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
@@ -116,7 +132,7 @@ class DetailsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if stack.frame.maxY < view.frame.maxY {
+        if stack.frame.maxY + 100 < view.frame.maxY {
             scrollView.isScrollEnabled = false
         }
     }
