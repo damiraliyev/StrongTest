@@ -5,11 +5,6 @@
 //  Created by Damir Aliyev on 13.05.2023.
 //
 
-// This file was generated from JSON Schema using codebeautify, do not modify it directly.
-// To parse the JSON, add this file to your project and do:
-//
-//   let welcome5 = try Welcome5(json)
-
 import Foundation
 
 struct Country: Codable {
@@ -18,7 +13,6 @@ struct Country: Codable {
     let capital: [String]?
     let region: String?
     let subregion: String?
-    let latlng: [Double]?
     let area: Double?
     let population: Int?
     let timezones: [String]?
@@ -29,7 +23,7 @@ struct Country: Codable {
     let maps: Map?
     
     static func makeSkeleton() -> Country {
-        return Country(name: Name(common: "     "), currencies: nil, capital: ["     "], region: nil, subregion: nil, latlng: nil, area: nil, population: nil, timezones: nil, continents: nil, flags: nil, cca2: nil, capitalInfo: nil, maps: nil)
+        return Country(name: Name(common: "     "), currencies: nil, capital: ["     "], region: nil, subregion: nil, area: nil, population: nil, timezones: nil, continents: nil, flags: nil, cca2: nil, capitalInfo: nil, maps: nil)
     }
 }
 

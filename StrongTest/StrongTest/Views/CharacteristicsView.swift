@@ -48,14 +48,14 @@ class CharacteristicsView: UIView {
         NSLayoutConstraint.activate([
             dot.leadingAnchor.constraint(equalTo: leadingAnchor),
             dot.lastBaselineAnchor.constraint(equalTo: centerYAnchor)
-//            dot.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
             stack.centerYAnchor.constraint(equalTo: centerYAnchor),
             stack.leadingAnchor.constraint(equalTo: dot.trailingAnchor, constant: 10),
             //Нужно было дать и trailing стороны, так как, если у страны два и больше валют, то они уйдут просто за экран
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor)
+            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     

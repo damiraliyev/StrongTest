@@ -35,7 +35,7 @@ class DetailsViewController: UIViewController {
     
     let timezonesView = CharacteristicsView(characterictic: "Timezones:")
     
-    let stack = makeStack(axis: .vertical, spacing: 40)
+    let stack = makeStack(axis: .vertical, spacing: 20)
     
     
     lazy var scrollView: UIScrollView = {
@@ -53,11 +53,10 @@ class DetailsViewController: UIViewController {
         
         return contentView
     }()
-    
-    let scrollStack = makeStack(axis: .vertical, spacing: 20)
+
     
     var contentSize: CGSize {
-        CGSize(width: self.view.frame.width, height: self.view.frame.height + 100)
+        CGSize(width: self.view.frame.width, height: self.view.frame.height + 50)
     }
     
     override func viewDidLoad() {
@@ -103,6 +102,7 @@ class DetailsViewController: UIViewController {
     
     private func layout() {
         view.addSubview(scrollView)
+
         
         scrollView.addSubview(contentView)
         
@@ -130,16 +130,24 @@ class DetailsViewController: UIViewController {
             stack.trailingAnchor.constraint(equalTo: imageView.trailingAnchor)
         ])
     }
-
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if stack.frame.maxY + 100 < view.frame.maxY {
-            scrollView.isScrollEnabled = false
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+                return
+            }
+            if self.stack.frame.maxY + 100 < self.view.frame.maxY {
+                self.scrollView.isScrollEnabled = false
+            } else {
+                let height = self.stack.frame.maxY + 50
+                self.contentView.frame.size = CGSize(width: self.view.frame.width, height: height)
+                self.scrollView.contentSize = CGSize(width: self.view.frame.width, height: height)
+            }
         }
         
     }
+
     
     
 }

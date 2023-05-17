@@ -80,9 +80,7 @@ class CollectionViewViewModel {
     func cellViewModel(for indexPath: IndexPath) -> CollectionViewCellViewModel {
 
         switch indexPath.section {
-        case 0:
-            print("SECTION 0")
-            return CollectionViewCellViewModel(country: africaCountries[indexPath.row])
+        case 0: return CollectionViewCellViewModel(country: africaCountries[indexPath.row])
         case 1: return CollectionViewCellViewModel(country: antarcticaCountries[indexPath.row])
         case 2: return CollectionViewCellViewModel(country: asiaCountries[indexPath.row])
         case 3: return CollectionViewCellViewModel(country: europeCountries[indexPath.row])
@@ -90,7 +88,7 @@ class CollectionViewViewModel {
         case 5: return CollectionViewCellViewModel(country: oceniaCountries[indexPath.row])
         case 6: return CollectionViewCellViewModel(country: southAmericaCountries[indexPath.row])
         default:
-            return CollectionViewCellViewModel(country: Country(name: Name(common: "   "), currencies: nil, capital: nil, region: "", subregion: "", latlng: [], area: 0, population: 0, timezones: [], continents: [], flags: Flags(png: ""), cca2: "", capitalInfo: nil, maps: nil))
+            return CollectionViewCellViewModel(country: Country(name: Name(common: "   "), currencies: nil, capital: nil, region: "", subregion: "", area: 0, population: 0, timezones: [], continents: [], flags: Flags(png: ""), cca2: "", capitalInfo: nil, maps: nil))
         }
 
     }

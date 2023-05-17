@@ -29,7 +29,7 @@ final class NetworkService {
                 completion(.failure(.serverError))
                 return
             }
-            print("data: ")
+            
             do {
                 let countries = try JSONDecoder().decode([Country].self, from: data)
                 completion(.success(countries))
@@ -47,8 +47,6 @@ final class NetworkService {
             print("URL", "https://restcountries.com/v3.1/alpha/\(cca2)")
             return
         }
-        
-        print("URL", "https://restcountries.com/v3.1/alpha/\(cca2)")
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
