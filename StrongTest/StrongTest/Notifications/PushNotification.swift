@@ -22,8 +22,6 @@ class PushNotification {
             case .notDetermined:
                 notificationCenter.requestAuthorization(options: [.alert, .sound]) { didAllow, error in
                     if didAllow {
-//                        self?.dispatchNotification()
-         
                         completion(true)
                     } else {
                         completion(false)
@@ -35,10 +33,10 @@ class PushNotification {
         }
     }
     
-    func dispatchNotification() {
+    func dispatchNotification(name: String, capital: String, cca2: String) {
         let id = "notify"
-        let title = "Kazakhstan"
-        let body = "Do you want to know about Kazakhstan"
+        let title = name
+        let body = "Capital of \(title) is \(capital)"
         
         let notificationCenter = UNUserNotificationCenter.current()
         
@@ -51,7 +49,7 @@ class PushNotification {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         
-//        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
         notificationCenter.add(request)
     }
 }

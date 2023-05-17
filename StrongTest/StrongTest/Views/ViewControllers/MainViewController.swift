@@ -105,7 +105,9 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         let widthPerItem = availableWidth / itemsPerRow
         
         if selectedIndexes.contains(indexPath) {
-            return CGSize(width: widthPerItem, height: 250)
+            let height = viewModel.heightOfSelectedItem(indexPath: indexPath)
+            print("HEIGHT", height)
+            return CGSize(width: widthPerItem, height: height)
         } else {
             // Image height(55) + 12 padding from top + 12 padding from bottom
             return CGSize(width: widthPerItem, height: 79)
@@ -203,7 +205,7 @@ extension MainViewController {
         PushNotification.shared.checkForPermission { [weak self] granted in
             if granted {
                 self?.viewModel.getRandomCountry(completion: { name, capital, cca2 in
-                    self?.dispatchNotification(
+                    PushNotification.shared.dispatchNotification(
                         name: name,
                         capital: capital,
                         cca2: cca2
@@ -212,27 +214,6 @@ extension MainViewController {
             }
         }
     }
-    
-    func dispatchNotification(name: String, capital: String, cca2: String) {
-        let id = "notify"
-        let title = name
-        let body = "Capital of \(title) is \(capital)"
-        
-        let notificationCenter = UNUserNotificationCenter.current()
-        
-        let content = UNMutableNotificationContent()
-        
-        content.title = title
-        content.body = body
-        content.sound = .default
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-        
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
-        notificationCenter.add(request)
-    }
-    
 }
 
 

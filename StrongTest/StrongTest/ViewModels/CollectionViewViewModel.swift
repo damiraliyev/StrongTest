@@ -30,6 +30,38 @@ class CollectionViewViewModel {
         return sectionTitles.count
     }
     
+    func heightOfSelectedItem(indexPath: IndexPath) -> CGFloat {
+        var currencies: [String: Currencies]? = nil
+        let section = sectionTitles[indexPath.section]
+        switch section {
+        case .africa:
+            currencies = africaCountries[indexPath.row].currencies?.compactMapValues({$0})
+        case .antarctica:
+            currencies = antarcticaCountries[indexPath.row].currencies?.compactMapValues({$0})
+        case .asia:
+            currencies = asiaCountries[indexPath.row].currencies?.compactMapValues({$0})
+        case .europe:
+            currencies = europeCountries[indexPath.row].currencies?.compactMapValues({$0})
+        case .northAmerica:
+            currencies = northAmericaCountries[indexPath.row].currencies?.compactMapValues({$0})
+        case .oceania:
+            currencies = oceniaCountries[indexPath.row].currencies?.compactMapValues({$0})
+        case .southAmerica:
+            currencies = southAmericaCountries[indexPath.row].currencies?.compactMapValues({$0})
+        case .continent:
+            return 250
+        }
+        
+        let numOfCurrencies = currencies?.count ?? 0
+        print("NUM", numOfCurrencies)
+        if numOfCurrencies <= 2 {
+            return 250
+        } else {
+            return 270
+        }
+        
+    }
+    
     func numberOfItemsInSection(section: Int) -> Int {
         switch section {
         case 0: return africaCountries.count
@@ -43,7 +75,6 @@ class CollectionViewViewModel {
             return 0
         }
     }
-    
     
     
     func cellViewModel(for indexPath: IndexPath) -> CollectionViewCellViewModel {
