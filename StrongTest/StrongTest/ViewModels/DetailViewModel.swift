@@ -51,19 +51,13 @@ class DetailViewModel {
     var currencies: String {
         var str = ""
         
-        guard let curr = country.currencies else {
-            return ""
-        }
-        
-        for property in Mirror(reflecting: curr).children {
-            if let currency = property.value as? Currency {
-                print("\(property.label!) = \(currency)")
-                
-                str += "\(currency.name) (\(property.label?.uppercased() ?? "")) \n"
+        if let unwrappedCurrencies = country.currencies?.compactMapValues( {$0} ) {
+            for ( _, value ) in unwrappedCurrencies {
+                str += "\(value.name ?? "") (\(value.symbol ?? "")) \n"
             }
         }
-        
         return String(str.dropLast(2))
+        
     }
     
     var timezones: String {
