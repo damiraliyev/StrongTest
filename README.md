@@ -1,7 +1,7 @@
 # StrongTest
 Тестовое задание iOS, Strong
 
-Link to YouTube, where the working application is demonstratedе: https://youtube.com/shorts/QHXATTJNgTc
+Link to YouTube, where the working application is demonstrated: https://youtube.com/shorts/QHXATTJNgTc
 
 ## What is done from advanced: 
 1. Use programmatic Autolayout
