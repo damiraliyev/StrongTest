@@ -45,7 +45,7 @@ class PushNotification {
         content.body = body
         content.sound = .default
 
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2.5, repeats: false)
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
