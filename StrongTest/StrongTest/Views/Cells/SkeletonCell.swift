@@ -16,23 +16,14 @@ import UIKit
 
 import UIKit
 
-//extension SkeletonCell: SkeletonLoadable {}
+extension SkeletonCell: SkeletonLoadable {}
 
 
-class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
+class SkeletonCell: UICollectionViewCell {
     
-    override var isSelected: Bool {
-        didSet {
-            animate()
-        }
-    }
+   
     static let reuseID = "SkeletonCell"
-    
-//    override var isSelected: Bool {
-//        didSet {
-//            animate()
-//        }
-//    }
+
     
     let container: UIView = {
         let view = UIView()
@@ -69,17 +60,17 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
         
         return imageView
     }()
-    
-    let containerLayer = CAGradientLayer()
+
     
     let imageLayer = CAGradientLayer()
     let nameLayer = CAGradientLayer()
     let capitalLayer = CAGradientLayer()
-    let chevronLayer = CAGradientLayer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
+        setupLayers()
+        setupAnimation()
         layoutCell()
         
     }
@@ -94,9 +85,6 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 10
         clipsToBounds = true
-        setupLayers()
-        setupAnimation()
-        
     }
 
     private func layoutCell() {
@@ -143,12 +131,9 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
             guard let viewModel = viewModel else {
                 return
             }
-           
-//            flagImageView.sd_setImage(with: URL(string: viewModel.flagURL))
+        
             nameLabel.text = viewModel.name
             capitalLabel.text = viewModel.capital
-
-
         }
     }
     
@@ -165,9 +150,6 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
         capitalLayer.endPoint = CGPoint(x: 1, y: 0.5)
         capitalLabel.layer.addSublayer(capitalLayer)
         
-        chevronLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        chevronLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        chevronImageView.layer.addSublayer(chevronLayer)
     }
     
     private func setupAnimation() {
@@ -183,33 +165,25 @@ class SkeletonCell: UICollectionViewCell, SkeletonLoadable {
         
         let capitalGroup = makeAnimationGroup(previousGroup: nameGroup)
         capitalLayer.add(capitalGroup, forKey: key)
-        
-        let chevronGroup = makeAnimationGroup(previousGroup: capitalGroup)
-        chevronLayer.add(chevronGroup, forKey: key)
-
-    }
-    
-    func animate() {
-        UIView.animate(withDuration: 0.3, delay: 0.3, usingSpringWithDamping: 0.9, initialSpringVelocity: 1, options: .curveEaseIn) {
-            self.contentView.layoutIfNeeded()
-        }
-        
-        UIView.animate(withDuration: 0.3) {
-            let upsideDown = CGAffineTransform(rotationAngle: .pi * -0.999)
-            self.chevronImageView.transform = self.isSelected ? upsideDown : .identity
-        }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        imageLayer.frame = flagImageView.bounds
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.imageLayer.frame = self.flagImageView.bounds
+            
+            self.nameLayer.frame = self.nameLabel.bounds
+            self.nameLayer.cornerRadius = self.nameLabel.bounds.height/2
+            
+            self.capitalLayer.frame = self.capitalLabel.bounds
+            self.capitalLayer.cornerRadius = self.capitalLabel.bounds.height/2
+        }
         
-        nameLayer.frame = nameLabel.bounds
-        nameLayer.cornerRadius = nameLabel.bounds.height/2
-        
-        capitalLayer.frame = capitalLabel.bounds
-        capitalLayer.cornerRadius = capitalLabel.bounds.height/2
+       
         
     }
     

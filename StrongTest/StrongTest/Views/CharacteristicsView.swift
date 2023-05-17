@@ -15,7 +15,7 @@ class CharacteristicsView: UIView {
     let stack = makeStack(axis: .vertical, spacing: 5)
     
     
-    init(characterictic: String, value: String, underlined: Bool = false) {
+    init(characterictic: String, value: String = "", underlined: Bool = false) {
         super.init(frame: .zero)
         characteristicLabel.text = characterictic
         valueLabel.text = value

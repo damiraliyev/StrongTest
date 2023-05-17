@@ -17,23 +17,23 @@ class DetailsViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
-        imageView.image = UIImage(named: "Kazakhstan")
+
         return imageView
     }()
     
-    let regionView = CharacteristicsView(characterictic: "Region:", value: "Asia")
+    let regionView = CharacteristicsView(characterictic: "Region:")
     
-    let capitalView = CharacteristicsView(characterictic: "Capital:", value: "Nur-Sultan")
+    let capitalView = CharacteristicsView(characterictic: "Capital:")
     
-    let capitalCoordinatesView = CharacteristicsView(characterictic: "Capital Coordinates:", value: "51.08, 71.26", underlined: true)
+    let capitalCoordinatesView = CharacteristicsView(characterictic: "Capital Coordinates:", underlined: true)
     
-    let populationView = CharacteristicsView(characterictic: "Population:", value: "19 mln")
+    let populationView = CharacteristicsView(characterictic: "Population:")
     
-    let areaView = CharacteristicsView(characterictic: "Area:", value: "2 724 900 km^2")
+    let areaView = CharacteristicsView(characterictic: "Area:")
     
-    let currenciesView = CharacteristicsView(characterictic: "Currency:", value: "Tenge (KZT)")
+    let currenciesView = CharacteristicsView(characterictic: "Currency:")
     
-    let timezonesView = CharacteristicsView(characterictic: "Timezones:", value: "GMT+6")
+    let timezonesView = CharacteristicsView(characterictic: "Timezones:")
     
     let stack = makeStack(axis: .vertical, spacing: 40)
     
@@ -77,6 +77,7 @@ class DetailsViewController: UIViewController {
             populationView.valueLabel.text = viewModel.population
             areaView.valueLabel.attributedText = viewModel.area.addPower(power: 2)
             currenciesView.valueLabel.text = viewModel.currencies
+            timezonesView.valueLabel.text = viewModel.timezones
         }
         
         addGestureRecognizers()
@@ -129,12 +130,15 @@ class DetailsViewController: UIViewController {
             stack.trailingAnchor.constraint(equalTo: imageView.trailingAnchor)
         ])
     }
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         if stack.frame.maxY + 100 < view.frame.maxY {
             scrollView.isScrollEnabled = false
         }
+        
     }
     
     

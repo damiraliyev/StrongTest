@@ -5,6 +5,7 @@
 //  Created by Damir Aliyev on 15.05.2023.
 //
 
+import Foundation
 
 class DetailViewModel {
     let country: Country
@@ -66,16 +67,16 @@ class DetailViewModel {
             return ""
         }
         for timezone in timezones {
-            tmz += timezone + ", "
+            tmz += timezone + "\n"
         }
         
-        return String(tmz.dropLast(2))
+        return String(tmz)
     }
     
     var mapURL: String {
         return country.maps?.openStreetMaps ?? ""
     }
-    
+
     init(country: Country) {
         self.country = country
     }

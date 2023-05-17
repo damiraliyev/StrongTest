@@ -53,7 +53,7 @@ class CollectionViewViewModel {
         }
         
         let numOfCurrencies = currencies?.count ?? 0
-        print("NUM", numOfCurrencies)
+        
         if numOfCurrencies <= 2 {
             return 250
         } else {

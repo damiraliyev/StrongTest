@@ -43,16 +43,16 @@ class MainViewController: UIViewController {
         collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         collectionView.register(SkeletonCell.self, forCellWithReuseIdentifier: SkeletonCell.reuseID)
         setupSkeletons()
-        
-        viewModel.fetchCountries { [weak self] success in
-            if success {
-                DispatchQueue.main.async {
-                    self?.isLoaded = true
-                    self?.pushNotificationIfAllowed()
-                    self?.collectionView.reloadData()
-                }
-            }
-        }
+//
+//        viewModel.fetchCountries { [weak self] success in
+//            if success {
+//                DispatchQueue.main.async {
+//                    self?.isLoaded = true
+//                    self?.pushNotificationIfAllowed()
+//                    self?.collectionView.reloadData()
+//                }
+//            }
+//        }
     }
     
     private func setupSkeletons() {
@@ -106,7 +106,6 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         
         if selectedIndexes.contains(indexPath) {
             let height = viewModel.heightOfSelectedItem(indexPath: indexPath)
-            print("HEIGHT", height)
             return CGSize(width: widthPerItem, height: height)
         } else {
             // Image height(55) + 12 padding from top + 12 padding from bottom
@@ -125,6 +124,10 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        if !isLoaded {
+            return false
+        }
+        
         collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
         selectedIndexes.append(indexPath)
         collectionView.performBatchUpdates(nil)
